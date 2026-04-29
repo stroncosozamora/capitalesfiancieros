@@ -37,7 +37,7 @@ Estructura exacta:
       },
       body: JSON.stringify({
         model: "claude-sonnet-4-5",
-        max_tokens: 1500,
+        max_tokens: 4000,
         messages: [{ role: "user", content: [contentBlock, { type: "text", text: prompt }] }]
       })
     });

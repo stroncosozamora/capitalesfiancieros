@@ -1,6 +1,8 @@
 {
   "rewrites": [
     { "source": "/api/analyze", "destination": "/api/analyze" },
-    { "source": "/api/chat", "destination": "/api/chat" }
+    { "source": "/api/chat", "destination": "/api/chat" },
+    { "source": "/api/recommendations", "destination": "/api/recommendations" },
+    { "source": "/api/recommendation-like", "destination": "/api/recommendation-like" }
   ]
 }

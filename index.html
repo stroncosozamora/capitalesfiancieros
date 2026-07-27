@@ -12,7 +12,7 @@
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://www.capitalesfinancieros.cl/">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"ProfessionalService","name":"Capitales Financieros","description":"Orientación personalizada en seguros de vida, protección y soluciones de ahorro en Chile.","url":"https://www.capitalesfinancieros.cl/","telephone":"+56953494916","email":"sebastian.troncoso@zurich.com","address":{"@type":"PostalAddress","addressLocality":"Santiago","addressCountry":"CL"},"areaServed":"CL","serviceType":["Seguros de vida","Ahorro previsional","Protección de salud"]}
+{"@context":"https://schema.org","@type":"ProfessionalService","name":"Capitales Financieros","description":"Orientación personalizada en seguros de vida, protección y soluciones de ahorro en Chile.","url":"https://www.capitalesfinancieros.cl/","telephone":"+56953494916","email":"sebastian.troncoso@zurich.com","address":{"@type":"PostalAddress","addressLocality":"Santiago","addressCountry":"CL"},"areaServed":"CL","serviceType":["Seguros de vida","Ahorro previsional","Protección de salud"],"sameAs":["https://www.instagram.com/capitales.financieros/"]}
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -153,6 +153,16 @@ body { font-family: "DM Sans", sans-serif; background: var(--bg-dark); color: va
   border-radius: 20px; padding: 4px 12px;
   font-size: 11px; color: rgba(133,183,235,0.8); font-weight: 500;
 }
+.hero-instagram {
+  display: inline-flex; align-items: center; gap: 9px;
+  width: fit-content; margin-top: 1rem; padding: 10px 15px;
+  border: 1px solid rgba(133,183,235,0.42); border-radius: 999px;
+  color: #fff; text-decoration: none; font-size: 12px; font-weight: 500;
+  letter-spacing: 0.02em; background: rgba(64,102,179,0.16);
+  transition: transform .2s ease, background .2s ease, border-color .2s ease;
+}
+.hero-instagram:hover { transform: translateY(-2px); background: rgba(64,102,179,0.3); border-color: var(--light-blue); }
+.hero-instagram svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.8; }
 @media (max-width: 580px) {
   .hero-inner { flex-direction: column; align-items: flex-start; gap: 1.25rem; }
   .hero-photo-frame { width: 110px; height: 110px; }
@@ -415,6 +425,10 @@ body { font-family: "DM Sans", sans-serif; background: var(--bg-dark); color: va
           <span class="hero-tag">Ahorro previsional</span>
           <span class="hero-tag">Protección de salud</span>
         </div>
+        <a class="hero-instagram" href="https://www.instagram.com/capitales.financieros/" target="_blank" rel="noopener noreferrer" aria-label="Visitar Capitales Financieros en Instagram">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          <span>@capitales.financieros</span>
+        </a>
       </div>
     </div>
   </div>

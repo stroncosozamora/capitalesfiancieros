@@ -18,9 +18,12 @@ const analysisSchema = {
         properties: {
           nombre: { type: "string" },
           valor: { type: "string" },
+          vigencia: { type: "string" },
+          deducible_carencia: { type: "string" },
+          exclusiones: { type: "string" },
           descripcion: { type: "string" }
         },
-        required: ["nombre", "valor", "descripcion"]
+        required: ["nombre", "valor", "vigencia", "deducible_carencia", "exclusiones", "descripcion"]
       }
     },
     brechas: {
@@ -115,6 +118,7 @@ Reglas:
 - No inventes montos, coberturas, exclusiones, vigencias ni condiciones.
 - Cuando un dato no sea legible o no esté informado, indica "No identificado en el documento".
 - Distingue coberturas, límites, deducibles, carencias, exclusiones y condiciones relevantes.
+- Para cada cobertura completa por separado su monto, vigencia, deducible o carencia, exclusiones y descripción.
 - El score mide claridad y amplitud de protección observable en el documento; no representa una calificación oficial ni garantiza que la póliza sea adecuada para la persona.
 - Las brechas son puntos que conviene revisar con un agente, no afirmaciones de que falte protección.
 - Mantén un lenguaje claro, profesional y prudente, adecuado para Chile.

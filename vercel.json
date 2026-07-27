@@ -2,6 +2,7 @@
   "rewrites": [
     { "source": "/api/analyze", "destination": "/api/analyze" },
     { "source": "/api/chat", "destination": "/api/chat" },
+    { "source": "/api/report-email", "destination": "/api/report-email" },
     { "source": "/api/recommendations", "destination": "/api/recommendations" },
     { "source": "/api/recommendation-like", "destination": "/api/recommendation-like" }
   ]

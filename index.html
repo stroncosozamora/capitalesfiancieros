@@ -33,24 +33,42 @@
 html { scroll-behavior: smooth; }
 body { font-family: "DM Sans", sans-serif; background: var(--bg-dark); color: var(--text); min-height: 100vh; overflow-x: hidden; }
 
-.screen { display: none; min-height: 100vh; }
+.screen { display: none; min-height: 100vh; margin-left: 232px; }
 .screen.active { display: block; }
 
 /* ── NAV ── */
 .nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  display: flex; align-items: center; gap: 14px;
-  padding: 14px 24px;
-  background: rgba(0,0,60,0.85);
-  backdrop-filter: blur(16px);
-  border-bottom: 0.5px solid var(--border);
-  transform: translateY(-100%);
-  transition: transform 0.3s ease;
+  position:fixed; inset:0 auto 0 0; z-index:300; width:232px;
+  display:flex; flex-direction:column; gap:8px; padding:22px 14px;
+  background:linear-gradient(180deg,rgba(0,0,58,.98),rgba(5,14,48,.97));
+  backdrop-filter:blur(18px); border-right:1px solid var(--border);
+  box-shadow:18px 0 50px rgba(0,0,30,.18);
 }
-.nav.visible { transform: translateY(0); }
-.nav-back { background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 6px; color: var(--light-blue); font-size: 13px; font-family: "DM Sans", sans-serif; padding: 4px 0; }
-.nav-back svg { width: 16px; height: 16px; fill: none; stroke: var(--light-blue); stroke-width: 2; stroke-linecap: round; }
-.nav-title { font-size: 14px; font-weight: 500; color: #fff; }
+.nav-brand{padding:6px 10px 20px;margin-bottom:4px;border-bottom:1px solid var(--border)}
+.nav-brand-name{font-family:"Cormorant Garamond",serif;color:#fff;font-size:18px;font-weight:700;letter-spacing:.08em}
+.nav-brand-sub{color:var(--text-muted);font-size:9px;letter-spacing:.2em;text-transform:uppercase;margin-top:2px}
+.side-nav-button{
+  position:relative;
+  width:100%;display:flex;align-items:center;gap:12px;padding:11px 12px;
+  border:1px solid transparent;border-radius:12px;background:transparent;
+  color:var(--text-muted);cursor:pointer;font:500 12px "DM Sans",sans-serif;text-align:left;
+  transition:background .2s,border-color .2s,color .2s,transform .2s;
+}
+.side-nav-button:hover{color:#fff;background:rgba(64,102,179,.14);transform:translateX(2px)}
+.side-nav-button.active{color:#fff;background:linear-gradient(90deg,rgba(64,102,179,.32),rgba(64,102,179,.1));border-color:rgba(133,183,235,.3)}
+.side-nav-button.active::before{content:"";position:absolute;left:0;width:3px;height:24px;border-radius:0 3px 3px 0;background:var(--light-blue)}
+.side-nav-button svg{width:19px;height:19px;flex:none;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.nav-spacer{flex:1}
+.nav-whatsapp{color:#a5e9c0}.nav-whatsapp:hover{color:#fff;background:rgba(37,211,102,.14)}
+@media(max-width:760px){
+  .screen{margin-left:0;padding-bottom:72px}
+  .nav{inset:auto 0 0 0;width:auto;height:68px;flex-direction:row;align-items:stretch;gap:2px;padding:7px 8px;background:rgba(0,0,55,.97);border-right:0;border-top:1px solid var(--border);overflow-x:auto;box-shadow:0 -10px 35px rgba(0,0,30,.28)}
+  .nav-brand,.nav-spacer,.nav-whatsapp{display:none}
+  .side-nav-button{min-width:64px;justify-content:center;flex-direction:column;gap:3px;padding:5px 7px;font-size:9px;border-radius:9px;text-align:center}
+  .side-nav-button:hover{transform:none}.side-nav-button.active::before{left:auto;top:0;width:24px;height:3px;border-radius:0 0 3px 3px}
+  .side-nav-button svg{width:18px;height:18px}
+  .wa-fab{bottom:84px}.chat-fab{bottom:150px}
+}
 
 /* ── HOME ── */
 #screen-home { background: var(--bg-dark); }
@@ -187,33 +205,6 @@ body { font-family: "DM Sans", sans-serif; background: var(--bg-dark); color: va
   padding: 2.5rem clamp(1.5rem, 8vw, 6rem);
   max-width: 1100px; margin: 0 auto;
 }
-.home-nav-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 12px; width: 100%;
-}
-@media (min-width: 600px) { .home-nav-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (min-width: 900px) { .home-nav-grid { grid-template-columns: repeat(3, 1fr); } }
-.nav-card {
-  background: rgba(0,0,80,0.45); border: 0.5px solid var(--border);
-  border-radius: 16px; padding: 1.25rem 1.5rem;
-  cursor: pointer; display: flex; align-items: center; gap: 16px;
-  transition: all 0.2s ease; text-align: left; position: relative; overflow: hidden;
-}
-.nav-card::before { content:""; position:absolute; inset:0; background:linear-gradient(135deg, rgba(64,102,179,0.1) 0%, transparent 60%); opacity:0; transition:opacity 0.2s; }
-.nav-card:hover { border-color:rgba(64,102,179,0.6); background:rgba(0,0,104,0.5); transform:translateY(-2px); }
-.nav-card:hover::before { opacity:1; }
-.nav-card-icon { width:48px; height:48px; flex-shrink:0; background:rgba(64,102,179,0.15); border-radius:12px; display:flex; align-items:center; justify-content:center; border:0.5px solid rgba(64,102,179,0.3); }
-.nav-card-icon svg { width:22px; height:22px; fill:none; stroke:var(--light-blue); stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
-.nav-card-body { flex:1; }
-.nav-card-title { font-size:14px; font-weight:500; color:#fff; margin-bottom:3px; }
-.nav-card-desc { font-size:12px; color:var(--text-muted); line-height:1.4; }
-.nav-card-arrow { flex-shrink:0; opacity:0.4; transition:opacity 0.2s, transform 0.2s; }
-.nav-card:hover .nav-card-arrow { opacity:1; transform:translateX(3px); }
-.nav-card-arrow svg { width:16px; height:16px; fill:none; stroke:var(--light-blue); stroke-width:2; stroke-linecap:round; }
-.nav-card.coming { opacity:0.55; cursor:default; }
-.nav-card.coming:hover { transform:none; border-color:var(--border); background:rgba(0,0,80,0.45); }
-.nav-card.coming .nav-card-title::after { content:" · Próximamente"; font-size:10px; color:var(--blue); font-weight:400; letter-spacing:0.05em; }
 
 .home-stats {
   display: flex; justify-content: center;
@@ -226,7 +217,7 @@ body { font-family: "DM Sans", sans-serif; background: var(--bg-dark); color: va
 .home-stat-lbl { font-size:11px; color:var(--text-muted); margin-top:2px; }
 
 /* ── INNER SCREENS ── */
-.inner-screen { min-height:100vh; background:var(--bg-dark); padding-top:60px; }
+.inner-screen { min-height:100vh; background:var(--bg-dark); }
 .inner-hero { background:linear-gradient(180deg, var(--navy) 0%, var(--bg-dark) 100%); padding:3rem clamp(1.5rem,8vw,8rem) 2rem; border-bottom:0.5px solid var(--border); }
 .inner-eyebrow { font-size:10px; font-weight:500; letter-spacing:0.14em; text-transform:uppercase; color:var(--blue); margin-bottom:6px; }
 .inner-title { font-family:"Cormorant Garamond",serif; font-size:clamp(26px,3.5vw,44px); font-weight:700; color:#fff; line-height:1.15; margin-bottom:8px; }
@@ -398,7 +389,7 @@ body { font-family: "DM Sans", sans-serif; background: var(--bg-dark); color: va
 .privacy-link{appearance:none;border:0;padding:0;background:none;color:var(--light-blue);font:inherit;text-decoration:underline;cursor:pointer}
 .privacy-content{max-width:760px}.privacy-content h2{font-family:"Cormorant Garamond",serif;color:#fff;font-size:26px;margin:1.8rem 0 .6rem}.privacy-content h2:first-child{margin-top:0}
 .privacy-content p,.privacy-content li{color:var(--text-muted);font-size:14px;line-height:1.75}.privacy-content ul{padding-left:1.2rem;margin:.5rem 0}.footer a{color:var(--light-blue)}
-.nav-card:focus-visible,.nav-back:focus-visible,.cf-submit:focus-visible,.analyze-btn:focus-visible,.privacy-link:focus-visible,.wa-fab:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.side-nav-button:focus-visible,.cf-submit:focus-visible,.analyze-btn:focus-visible,.privacy-link:focus-visible,.wa-fab:focus-visible{outline:2px solid #fff;outline-offset:3px}
 .recommendations-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,420px);gap:2rem;align-items:start}
 .recommendations-list{display:grid;gap:1rem}.recommendation-card{background:rgba(64,102,179,.08);border:1px solid var(--border);border-radius:18px;padding:1.25rem}
 .recommendation-head{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start}.recommendation-name{font-family:"Cormorant Garamond",serif;color:#fff;font-size:21px;font-weight:600}
@@ -416,11 +407,32 @@ body { font-family: "DM Sans", sans-serif; background: var(--bg-dark); color: va
 <body>
 
 <nav class="nav" id="nav-bar">
-  <button class="nav-back" onclick="goHome()">
-    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-    Inicio
+  <div class="nav-brand">
+    <div class="nav-brand-name">CAPITALES</div>
+    <div class="nav-brand-sub">Financieros</div>
+  </div>
+  <button class="side-nav-button active" data-screen="home" onclick="goHome()" aria-label="Ir al inicio">
+    <svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg><span>Inicio</span>
   </button>
-  <span class="nav-title" id="nav-title"></span>
+  <button class="side-nav-button" data-screen="analyzer" onclick="goTo('analyzer','Análisis de Póliza')" aria-label="Analizar una póliza">
+    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg><span>Póliza</span>
+  </button>
+  <button class="side-nav-button" data-screen="simulador" onclick="goTo('simulador','Calculadora de Pensión')" aria-label="Abrir la calculadora de pensión">
+    <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg><span>Pensión</span>
+  </button>
+  <button class="side-nav-button" data-screen="productos" onclick="goTo('productos','Productos')" aria-label="Ver productos y coberturas">
+    <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span>Productos</span>
+  </button>
+  <button class="side-nav-button" data-screen="testimonios" onclick="goTo('testimonios','Recomendaciones');loadRecommendations()" aria-label="Ver recomendaciones">
+    <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M17 11l2 2 4-4"/></svg><span>Recomendaciones</span>
+  </button>
+  <button class="side-nav-button" data-screen="contact" onclick="goTo('contact','Contacto')" aria-label="Abrir contacto">
+    <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg><span>Contacto</span>
+  </button>
+  <div class="nav-spacer"></div>
+  <a class="side-nav-button nav-whatsapp" href="https://wa.me/56953494916?text=Hola%20Sebasti%C3%A1n%2C%20me%20gustar%C3%ADa%20recibir%20asesor%C3%ADa%20financiera." target="_blank" rel="noopener noreferrer">
+    <svg viewBox="0 0 24 24"><path d="M21 11.5a8.5 8.5 0 01-12.3 7.6L3 21l1.9-5.7A8.5 8.5 0 1121 11.5z"/></svg><span>WhatsApp</span>
+  </a>
 </nav>
 
 <!-- ══ HOME ══ -->
@@ -458,40 +470,8 @@ body { font-family: "DM Sans", sans-serif; background: var(--bg-dark); color: va
     </div>
   </div>
 
-  <!-- Nav Cards + Stats -->
+  <!-- Stats -->
   <div class="home-body">
-    <div class="home-nav-grid">
-      <button class="nav-card" onclick="goTo('analyzer','Análisis de Póliza')">
-        <div class="nav-card-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
-        <div class="nav-card-body"><div class="nav-card-title">Analizar mi póliza</div><div class="nav-card-desc">Sube tu póliza y recibe un informe con IA en segundos</div></div>
-        <div class="nav-card-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
-      </button>
-      <button class="nav-card coming">
-        <div class="nav-card-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-        <div class="nav-card-body"><div class="nav-card-title">Productos</div><div class="nav-card-desc">Seguros de vida, ahorro, salud y más</div></div>
-        <div class="nav-card-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
-      </button>
-      <button class="nav-card" onclick="goTo('testimonios','Recomendaciones');loadRecommendations()">
-        <div class="nav-card-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
-        <div class="nav-card-body"><div class="nav-card-title">Recomendaciones</div><div class="nav-card-desc">Opiniones y experiencias compartidas</div></div>
-        <div class="nav-card-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
-      </button>
-      <button class="nav-card coming">
-        <div class="nav-card-icon"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg></div>
-        <div class="nav-card-body"><div class="nav-card-title">Blog</div><div class="nav-card-desc">Educación financiera para Chile</div></div>
-        <div class="nav-card-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
-      </button>
-      <button class="nav-card" onclick="goTo('simulador','Calculadora de Pensión')">
-        <div class="nav-card-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
-        <div class="nav-card-body"><div class="nav-card-title">Calculadora de pensión</div><div class="nav-card-desc">Proyecta tu ahorro y pensión futura</div></div>
-        <div class="nav-card-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
-      </button>
-      <button class="nav-card" onclick="goTo('contact','Contacto')">
-        <div class="nav-card-icon"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg></div>
-        <div class="nav-card-body"><div class="nav-card-title">Contacto</div><div class="nav-card-desc">Escríbenos y te respondemos a la brevedad</div></div>
-        <div class="nav-card-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
-      </button>
-    </div>
     <div class="home-stats">
       <div class="home-stat"><div class="home-stat-num">150+</div><div class="home-stat-lbl">Años de trayectoria global de Zurich</div></div>
       <div class="home-stat"><div class="home-stat-num">200+</div><div class="home-stat-lbl">Países y territorios con presencia</div></div>
@@ -628,20 +608,6 @@ body { font-family: "DM Sans", sans-serif; background: var(--bg-dark); color: va
     </div>
   </div>
 </div>
-
-<!-- ══ BLOG ══ -->
-<div class="screen" id="screen-blog">
-  <div class="inner-screen">
-    <div class="cs-page">
-      <div class="cs-badge-lg"><div class="cs-dot"></div>En construcción</div>
-      <div class="cs-page-icon"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg></div>
-      <h2>Blog financiero</h2>
-      <p>Artículos y guías para tomar mejores decisiones financieras en Chile. Próximamente disponible.</p>
-      <button class="cs-back-btn" onclick="goHome()">← Volver al inicio</button>
-    </div>
-  </div>
-</div>
-
 
 <!-- ══ SIMULADOR ══ -->
 <div class="screen" id="screen-simulador">
@@ -843,8 +809,9 @@ body { font-family: "DM Sans", sans-serif; background: var(--bg-dark); color: va
 const WA="56953494916";
 let selectedFile=null,analysisResult=null,chatHistory=[],chatOpen=false;
 
-function goTo(id,title){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));document.getElementById("screen-"+id).classList.add("active");document.getElementById("nav-bar").classList.add("visible");document.getElementById("nav-title").textContent=title;window.scrollTo({top:0,behavior:"smooth"});}
-function goHome(){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));document.getElementById("screen-home").classList.add("active");document.getElementById("nav-bar").classList.remove("visible");window.scrollTo({top:0,behavior:"smooth"});}
+function setActiveNavigation(id){document.querySelectorAll(".side-nav-button[data-screen]").forEach(btn=>btn.classList.toggle("active",btn.dataset.screen===id));}
+function goTo(id,title){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));document.getElementById("screen-"+id).classList.add("active");setActiveNavigation(id);document.title=title+" | Capitales Financieros";window.scrollTo({top:0,behavior:"smooth"});}
+function goHome(){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));document.getElementById("screen-home").classList.add("active");setActiveNavigation("home");document.title="Capitales Financieros | Sebastián Troncoso";window.scrollTo({top:0,behavior:"smooth"});}
 
 const fileInput=document.getElementById("file-input");
 const dropZone=document.getElementById("drop-zone");

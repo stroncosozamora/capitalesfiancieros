@@ -64,7 +64,8 @@ body { font-family: "DM Sans", sans-serif; background: var(--bg-dark); color: va
   .screen{margin-left:0;padding-bottom:72px}
   .nav{inset:auto 0 0 0;width:auto;height:68px;flex-direction:row;align-items:stretch;gap:2px;padding:7px 8px;background:rgba(0,0,55,.97);border-right:0;border-top:1px solid var(--border);overflow-x:auto;box-shadow:0 -10px 35px rgba(0,0,30,.28)}
   .nav-brand,.nav-spacer,.nav-whatsapp{display:none}
-  .side-nav-button{min-width:64px;justify-content:center;flex-direction:column;gap:3px;padding:5px 7px;font-size:9px;border-radius:9px;text-align:center}
+  .side-nav-button{min-width:84px;justify-content:center;flex-direction:column;gap:3px;padding:5px 7px;font-size:8.5px;border-radius:9px;text-align:center}
+  .side-nav-button span{white-space:nowrap}
   .side-nav-button:hover{transform:none}.side-nav-button.active::before{left:auto;top:0;width:24px;height:3px;border-radius:0 0 3px 3px}
   .side-nav-button svg{width:18px;height:18px}
   .wa-fab{bottom:84px}.chat-fab{bottom:150px}
@@ -424,7 +425,7 @@ body { font-family: "DM Sans", sans-serif; background: var(--bg-dark); color: va
     <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg><span>Póliza</span>
   </button>
   <button class="side-nav-button" data-screen="simulador" onclick="goTo('simulador','Calculadora de Pensión')" aria-label="Abrir la calculadora de pensión">
-    <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg><span>Pensión</span>
+    <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg><span>Calcula tu pensión</span>
   </button>
   <button class="side-nav-button" data-screen="productos" onclick="goTo('productos','Productos')" aria-label="Ver productos y coberturas">
     <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span>Productos</span>

@@ -1,5 +1,3 @@
-import { annualScenario, monthlyScenario } from "../herramientas/impuestos.mjs";
-
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const accessCookie = "cf_portal_access";
@@ -60,8 +58,9 @@ function verifyOrigin(req) {
   return origin === "https://" + host || (/^(localhost|127\.0\.0\.1)(:\d+)?$/.test(host ?? "") && origin === "http://" + host);
 }
 
-function createSnapshot(input) {
+async function createSnapshot(input) {
   if (input === undefined || input === null) return null;
+  const { annualScenario, monthlyScenario } = await import("../herramientas/impuestos.mjs");
   if (input.type === "annual") return annualScenario(input);
   if (input.type === "monthly") {
     const scenario = monthlyScenario(input);
@@ -76,7 +75,7 @@ function requestResult(res, result, error, status = 200) {
   return send(res, result.status === 409 ? 409 : 400, {error});
 }
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
@@ -153,7 +152,7 @@ export default async function handler(req, res) {
         return send(res, 400, {error:"Completa el código de cliente, el título y el resumen."});
       }
       let scenario;
-      try { scenario = createSnapshot(body.scenario); }
+      try { scenario = await createSnapshot(body.scenario); }
       catch { return send(res, 400, {error:"El escenario tributario es inválido o requiere datos oficiales adicionales."}); }
       const result = await call("/rest/v1/cf_advisories", {token,method:"POST",representation:true,
         body:{client_id:client,title,summary,scenario}});
@@ -168,4 +167,4 @@ export default async function handler(req, res) {
   } catch {
     return send(res, 502, {error:"El servicio de cuentas no respondió. Intenta nuevamente."});
   }
-}
+};

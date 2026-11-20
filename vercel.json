@@ -1,4 +1,5 @@
 {
+  "functions": { "api/portal.js": { "includeFiles": "herramientas/impuestos.mjs" } },
   "rewrites": [
     { "source": "/api/analyze", "destination": "/api/analyze" },
     { "source": "/api/chat", "destination": "/api/chat" },

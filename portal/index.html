@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="es-CL">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer">
+<title>Mi cuenta | Capitales Financieros</title><link rel="stylesheet" href="/assets/portal.css">
+<script type="module" src="/portal/cuenta.mjs"></script></head>
+<body>
+<header><strong><a href="/">Capitales Financieros</a></strong><nav aria-label="Navegación"><a href="/herramientas/">Simulador tributario</a></nav></header>
+<main>
+  <h1 id="page-title">Portal de asesorías</h1>
+  <p id="notice" class="message" role="status">Cargando acceso…</p>
+  <section id="auth-section" class="card" hidden>
+    <h2 id="auth-title">Iniciar sesión</h2>
+    <p>Usa tu correo y contraseña para ingresar.</p>
+    <form id="auth-form" class="stack">
+      <label>Correo electrónico<input id="email" type="email" autocomplete="email" maxlength="254" required></label>
+      <label>Contraseña<input id="password" type="password" autocomplete="current-password" maxlength="72" required></label>
+      <p id="auth-help" class="muted" hidden>Usa 12 caracteres o más. Si quieres ingresar como agente, solicita la activación desde tu cuenta.</p>
+      <div class="actions"><button id="auth-submit">Ingresar</button><button id="auth-toggle" class="secondary" type="button">Crear cuenta</button></div>
+    </form>
+  </section>
+  <div id="dashboard" hidden>
+    <div class="actions"><p id="identity"></p><button id="signout" type="button" class="secondary">Cerrar sesión</button></div>
+    <section id="client-section" class="card" hidden>
+      <h2>Vincular una asesoría</h2>
+      <p class="muted">Comparte este código con tu agente para que pueda publicar la asesoría en tu cuenta.</p>
+      <p id="client-code" class="output"></p>
+      <div class="actions"><button id="copy-code" type="button" class="secondary">Copiar código</button><button id="request-agent" type="button" class="secondary">Solicitar acceso de agente</button></div>
+      <p id="request-status" class="muted"></p>
+    </section>
+    <section id="admin-section" class="card" hidden>
+      <h2>Solicitudes de agentes</h2><ul id="requests" class="case-list"></ul>
+    </section>
+    <section id="staff-section" class="card" hidden>
+      <h2>Crear asesoría</h2>
+      <form id="case-form" class="stack">
+        <label>Código de cliente<input id="recipient-code" maxlength="36" required></label>
+        <label>Título<input id="case-title" maxlength="120" required></label>
+        <label>Resumen para el cliente<textarea id="case-summary" rows="5" maxlength="8000" required></textarea></label>
+        <label id="attach-field" class="check" hidden><input type="checkbox" id="attach-scenario" checked> <span id="attach-label">Adjuntar escenario tributario</span></label>
+        <div class="actions"><button id="save-case">Guardar borrador</button><a href="/herramientas/">Abrir simulador</a></div>
+      </form>
+    </section>
+    <section aria-labelledby="case-heading">
+      <h2 id="case-heading">Asesorías</h2><ul id="cases" class="case-list"></ul>
+    </section>
+  </div>
+</main>
+</body></html>

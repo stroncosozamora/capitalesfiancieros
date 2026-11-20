@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="es-CL">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simulador tributario | Capitales Financieros</title><link rel="stylesheet" href="/assets/portal.css">
+<meta name="robots" content="noindex,nofollow"><script type="module" src="/portal/proteger.mjs"></script>
+<script type="module" src="/herramientas/simulador.mjs"></script></head>
+<body>
+<p class="portal-status" id="tool-status" role="status">Comprobando sesión…</p>
+<div id="tool-content" hidden>
+<header><strong><a href="/portal/">Capitales Financieros</a></strong><nav aria-label="Menú principal">
+<a href="/portal/">Inicio</a><a href="/polizas/">Analizador de pólizas</a>
+<a href="/herramientas/" aria-current="page">Simulador APV</a><a href="/portal/#asesorias">Asesorías</a>
+</nav></header>
+<main>
+  <h1>Simulador tributario</h1>
+  <p class="intro">Compara el impuesto con y sin APV usando la base tributable que ya tienes.</p>
+  <div class="actions" aria-label="Período">
+    <button id="annual-mode" type="button" aria-pressed="true">IGC anual</button>
+    <button id="monthly-mode" type="button" aria-pressed="false">IUSC mensual</button>
+  </div>
+  <br>
+  <form id="calculator">
+    <div class="grid">
+      <section class="card stack">
+        <h2>Situación base</h2>
+        <p id="period-note" class="muted"></p>
+        <label id="month-field" hidden>Mes de remuneración<select id="month"></select></label>
+        <label>Base tributable (CLP)<input type="number" id="base" min="0" max="9999999999" required></label>
+      </section>
+      <section class="card stack">
+        <h2>APV régimen B</h2>
+        <label>Aporte adicional (CLP)<input type="number" id="contribution" min="0" max="9999999999" required></label>
+        <p id="apv-note" class="muted"></p>
+        <label id="room-field">Cupo anual disponible (CLP)<input type="number" id="room" min="0" max="23836776" value="23836776"></label>
+        <label id="prior-field" hidden>APV B ya aplicado en la liquidación (CLP)<input type="number" id="prior" min="0" max="9999999999" value="0"></label>
+      </section>
+    </div>
+    <section class="card" aria-live="polite">
+      <h2>Comparación</h2>
+      <table>
+        <thead><tr><th scope="col">Concepto</th><th scope="col">Base</th><th scope="col">Con APV B</th></tr></thead>
+        <tbody id="comparison">
+          <tr><th scope="row">Base tributable</th><td></td><td></td></tr>
+          <tr><th scope="row">Tramo marginal</th><td></td><td></td></tr>
+          <tr><th scope="row">Rebaja de tabla</th><td></td><td></td></tr>
+          <tr class="result"><th scope="row">Impuesto determinado</th><td></td><td></td></tr>
+        </tbody>
+      </table>
+      <p id="savings" class="output"></p>
+      <p id="result-note" class="muted"></p>
+    </section>
+    <details class="card" id="annual-details">
+      <summary>Comparar con régimen A</summary>
+      <label>Cotizaciones obligatorias de capitalización individual del año (CLP)<input type="number" id="mandatory" min="0" max="9999999999"></label>
+      <p id="bonus" class="output" aria-live="polite"></p>
+      <p class="muted">Estimación para aportes destinados a pensión y sin bonificación previa. El impuesto del escenario base se mantiene.</p>
+    </details>
+    <details class="card" id="monthly-details" hidden>
+      <summary>Aporte del empleador por la reforma previsional</summary>
+      <label>Base previsional con tope ya aplicado (CLP)<input type="number" id="employer" min="0" max="9999999999"></label>
+      <p id="employer-result" class="output" aria-live="polite"></p>
+    </details>
+    <div class="actions"><button type="button" id="transfer">Llevar escenario a una asesoría</button></div>
+    <p id="calc-status" class="message" role="status"></p>
+  </form>
+  <p class="muted">Fuentes <a href="https://www.sii.cl/valores_y_fechas/renta/2026/personas_naturales.html">IGC AT 2026</a> · <a href="https://www.sii.cl/valores_y_fechas/impuesto_2da_categoria/impuesto2026.htm">IUSC 2026</a> · <a href="https://www.sii.cl/servicios_online/renta/guia_practica_renta_2026.pdf">Guía de Renta</a> · <a href="https://www.chileatiende.gob.cl/fichas/130987">Aporte del empleador</a></p>
+</main>
+</div>
+</body></html>

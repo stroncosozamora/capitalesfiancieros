@@ -1,3 +1,5 @@
+import portalSession from "../lib/portal-session.cjs";
+
 import crypto from "node:crypto";
 
 const CORPORATE_EMAIL = "sebastian.troncoso@zurich.cl";
@@ -133,6 +135,7 @@ async function sendEmail(to, subject, html) {
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return json(res, 405, { error: "Método no permitido." });
+  if (!await portalSession.requirePortalSession(req, res)) return;
   if (!process.env.RESEND_API_KEY || !process.env.TURNSTILE_SECRET_KEY ||
       !process.env.SUPABASE_URL || !process.env.SUPABASE_SECRET_KEY) {
     return json(res, 503, { error: "El envío de informes aún no está configurado." });

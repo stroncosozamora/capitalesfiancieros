@@ -1,3 +1,5 @@
+import portalSession from "../lib/portal-session.cjs";
+
 const MODEL = "gpt-5.6-terra";
 const MAX_FILE_BYTES = 10 * 1024 * 1024;
 const ALLOWED_MEDIA_TYPES = new Set(["application/pdf", "image/jpeg", "image/png"]);
@@ -76,12 +78,8 @@ function base64Bytes(value) {
 }
 
 export default async function handler(req, res) {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-
-  if (req.method === "OPTIONS") return res.status(200).end();
   if (req.method !== "POST") return res.status(405).json({ error: "Método no permitido." });
+  if (!await portalSession.requirePortalSession(req, res)) return;
   if (!process.env.OPENAI_API_KEY) {
     return res.status(503).json({ error: "El analizador aún no está configurado." });
   }

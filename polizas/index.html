@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="es-CL">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Analizador de pólizas | Capitales Financieros</title>
+<link rel="stylesheet" href="/assets/polizas.css"><script type="module" src="/portal/proteger.mjs"></script>
+<script src="/polizas/analizador.js" defer></script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script></head>
+<body>
+<p class="portal-status" id="tool-status" role="status">Comprobando sesión…</p>
+<div id="tool-content" hidden>
+<header class="portal-menu"><strong><a href="/portal/">Capitales Financieros</a></strong><nav aria-label="Menú principal">
+<a href="/portal/">Inicio</a><a href="/polizas/" aria-current="page">Analizador de pólizas</a>
+<a href="/herramientas/">Simulador APV</a><a href="/portal/#asesorias">Asesorías</a></nav></header>
+<main id="screen-analyzer">
+  <div class="inner-screen">
+    <div class="inner-hero">
+      <h1 class="inner-title">Analizador de pólizas</h1>
+      <p class="inner-desc">Sube tu póliza actual y en segundos verás qué tienes cubierto, qué te falta y cómo mejorar tu protección.</p>
+    </div>
+    <div class="inner-body">
+      <div class="steps-row">
+        <div class="step-pill"><div class="step-num">1</div><div class="step-lbl">Sube tu póliza</div></div>
+        <div class="step-pill"><div class="step-num">2</div><div class="step-lbl">Análisis con IA</div></div>
+        <div class="step-pill"><div class="step-num">3</div><div class="step-lbl">Recibes el informe</div></div>
+      </div>
+      <div id="upload-section">
+        <span class="upload-label">Sube tu póliza</span>
+        <div class="drop-zone" id="drop-zone">
+          <input type="file" id="file-input" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" aria-label="Seleccionar póliza en PDF, JPG o PNG">
+          <div class="drop-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+          <h3>Arrastra tu póliza aquí</h3>
+          <p>o haz clic para seleccionar el archivo</p>
+          <div class="formats">PDF · JPG · PNG — máx. 10 MB</div>
+        </div>
+        <div class="file-selected" id="file-selected">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <span id="file-name">archivo.pdf</span>
+        </div>
+        <div class="error-box" id="error-box"></div>
+        <div class="consent-row">
+          <input type="checkbox" id="analyzer-consent">
+          <label for="analyzer-consent">Autorizo el tratamiento de este documento exclusivamente para generar el análisis solicitado y declaro haber leído la <a class="privacy-link" href="/privacidad/" target="_blank" rel="noopener">política de privacidad</a>.</label>
+        </div>
+        <button type="button" class="analyze-btn" id="analyze-btn" onclick="startAnalysis()" disabled>
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Analizar mi póliza
+        </button>
+        <p class="privacy-note">El documento se transmite únicamente cuando presionas “Analizar mi póliza”. Evita incluir antecedentes que no sean necesarios. Revisa la política de privacidad para conocer su tratamiento.</p>
+      </div>
+      <div class="loading-state" id="loading-state">
+        <div class="spinner"></div>
+        <p style="font-size:14px;font-weight:500;color:var(--text);">Analizando tu póliza...</p>
+        <p style="font-size:12px;color:var(--text-muted);margin-top:4px;">Esto puede tomar unos segundos</p>
+        <div style="margin-top:1.25rem;">
+          <div class="step-item active" id="step-1"><div class="step-dot"></div>Leyendo el documento</div>
+          <div class="step-item" id="step-2"><div class="step-dot"></div>Identificando coberturas</div>
+          <div class="step-item" id="step-3"><div class="step-dot"></div>Detectando brechas</div>
+          <div class="step-item" id="step-4"><div class="step-dot"></div>Generando recomendaciones</div>
+        </div>
+      </div>
+      <div class="results" id="results-section">
+        <div class="result-header">
+          <div class="check-circle"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div><h2>Análisis completado</h2><p id="res-aseguradora">Póliza analizada</p></div>
+        </div>
+        <div class="res-section-title">Nivel de protección actual</div>
+        <div class="score-bar-wrap">
+          <div class="score-label-row"><span id="score-label-text">Cobertura general</span><span id="score-pct">0%</span></div>
+          <div class="score-track"><div class="score-fill" id="score-fill" style="width:0%"></div></div>
+        </div>
+        <div class="res-section-title">Cuadro técnico de coberturas</div>
+        <div class="coverage-table-wrap">
+          <table class="coverage-table">
+            <thead><tr><th>Cobertura</th><th>Monto</th><th>Vigencia</th><th>Deducible / carencia</th><th>Exclusiones observables</th></tr></thead>
+            <tbody id="coberturas-table-body"></tbody>
+          </table>
+        </div>
+        <div class="res-section-title">Puntos que conviene revisar</div>
+        <div id="brechas-list"></div>
+        <div class="res-section-title">Resumen de tu póliza y aspectos por revisar</div>
+        <div id="compare-section"></div>
+        <div class="res-section-title">Recomendación</div>
+        <div class="rec-card">
+          <div class="rec-top">
+            <div class="rec-av"><img src="/assets/sebastian-troncoso-hero-v2.png" /></div>
+            <div><div class="rec-name">Sebastián Troncoso</div><div class="rec-role">Capitales Financieros · Zurich</div></div>
+          </div>
+          <p class="rec-text-p" id="rec-text"></p>
+          <a class="rec-cta" id="rec-cta" href="https://wa.me/56953494916?text=Hola%20Sebasti%C3%A1n%2C%20analic%C3%A9%20mi%20p%C3%B3liza%20y%20me%20gustar%C3%ADa%20conversar." target="_blank" rel="noopener noreferrer">Hablar con Sebastián →</a>
+        </div>
+        <div class="report-tools">
+          <h3>Guarda o envía este resumen</h3>
+          <p>La póliza original no se adjunta ni se almacena. Solo se enviará el resumen técnico generado.</p>
+          <label class="cf-label" for="report-name">Nombre y apellido *</label>
+          <input class="cf-input" id="report-name" maxlength="100" autocomplete="name" placeholder="Tu nombre y apellido">
+          <label class="consent-row" for="report-copy">
+            <input id="report-copy" type="checkbox" onchange="toggleReportCopy()">
+            <span>Enviarme también una copia a mi correo personal.</span>
+          </label>
+          <div class="report-copy-email" id="report-copy-email">
+            <label class="cf-label" for="report-email">Correo personal *</label>
+            <input class="cf-input" id="report-email" type="email" maxlength="254" autocomplete="email" placeholder="tucorreo@ejemplo.com">
+          </div>
+          <label class="consent-row" for="report-consent">
+            <input id="report-consent" type="checkbox">
+            <span>Autorizo el envío de este resumen a Sebastián Troncoso y, si lo seleccioné, a mi correo personal.</span>
+          </label>
+          <div class="cf-turnstile" data-sitekey="0x4AAAAAAD_Nfxw0uol0RTf7" data-theme="dark"></div>
+          <div class="report-actions">
+            <button class="report-secondary" type="button" onclick="printAnalysisReport()">Guardar como PDF</button>
+            <button class="cf-submit" id="report-send" type="button" onclick="sendAnalysisReport()" style="margin-top:0;max-width:none">Enviar resumen</button>
+          </div>
+          <div class="report-status" id="report-status" role="status"></div>
+        </div>
+        <button class="new-analysis-btn" onclick="resetAnalyzer()">Analizar otra póliza</button>
+      </div>
+    </div>
+  </div>
+</main>
+<button class="chat-fab" id="chat-fab" aria-label="Abrir chat de la póliza" onclick="toggleChat()">
+  <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+  <div class="notif-dot"></div>
+</button>
+<div class="chat-window" id="chat-window">
+  <div class="chat-header">
+    <div class="ch-av"><img src="/assets/sebastian-troncoso-hero-v2.png" /></div>
+    <div style="flex:1"><div class="ch-name">Asistente · Capitales Financieros</div><div class="ch-status">En línea</div></div>
+    <button class="ch-close" aria-label="Cerrar chat" onclick="toggleChat()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <div class="chat-messages" id="chat-messages"></div>
+  <div class="typing-indicator" id="typing-indicator">
+    <div class="typing-bubble"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>
+  </div>
+  <div class="chat-suggestions" id="chat-suggestions">
+    <button class="suggestion-btn" onclick="sendSuggestion(this)">¿Qué significa esta brecha?</button>
+    <button class="suggestion-btn" onclick="sendSuggestion(this)">¿Qué es lo más urgente cubrir?</button>
+    <button class="suggestion-btn" onclick="sendSuggestion(this)">¿Cómo mejoro mi cobertura?</button>
+  </div>
+  <div class="chat-input-row">
+    <input class="chat-input" id="chat-input" type="text" placeholder="Escribe tu pregunta..." onkeydown="if(event.key==='Enter') sendMessage()">
+    <button class="chat-send" aria-label="Enviar mensaje" onclick="sendMessage()"><svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+  </div>
+</div>
+</div>
+</body></html>

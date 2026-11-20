@@ -67,7 +67,7 @@ get("transfer").addEventListener("click",() => {
   if (!current) return;
   try {
     sessionStorage.setItem("cf-advisory-scenario",JSON.stringify(current));
-    location.assign("/portal/");
+    location.assign("/portal/#asesorias");
   } catch {
     get("calc-status").textContent = "El navegador impidió transferir el escenario.";
   }

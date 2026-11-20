@@ -16,3 +16,27 @@ summary{min-height:44px;display:list-item;align-content:center;color:var(--accen
 .output{font-weight:700;color:var(--navy);background:var(--highlight);padding:10px 12px;border-radius:7px;overflow-wrap:anywhere}.summary-text{white-space:pre-wrap;overflow-wrap:anywhere}.message{min-height:1.6em;color:var(--accent)}
 #auth-section{max-width:560px}.case-list{list-style:none;padding:0;margin:0}
 @media(max-width:480px){main{padding:24px 12px}th,td{font-size:.82rem}header{padding:16px 12px}}
+
+header nav a{padding:5px 0}
+header nav a[aria-current="page"]{font-weight:700;text-decoration-thickness:2px}
+.portal-status{padding:24px}
+.access-page{background:#eaf5ff}
+.access-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);width:min(1024px,calc(100% - 40px));min-height:min(610px,calc(100vh - 80px));margin:40px auto;padding:0;border:1px solid var(--line);border-radius:24px;overflow:hidden;box-shadow:0 22px 65px #10376518}
+.access-brand{display:flex;flex-direction:column;justify-content:space-between;gap:32px;padding:clamp(24px,5vw,56px);background:linear-gradient(145deg,#12365f,#164d79);color:#e9f6ff}
+.access-brand a{color:#c7eaff}
+.wordmark{display:block;font-size:1.05rem;margin-bottom:clamp(32px,10vw,96px)}
+.access-statement{font-size:clamp(2rem,4.9vw,3.65rem);line-height:1.03;letter-spacing:-.035em;color:#fff;font-weight:700}
+.access-form{align-self:stretch;display:flex;flex-direction:column;justify-content:center;padding:clamp(24px,5vw,56px);background:#fff}
+.access-form .stack{gap:14px}
+.access-form .stack button{justify-content:center;margin-top:5px}
+.access-message{min-height:24px;color:var(--accent);font-size:.94rem}
+.access-register{border-top:1px solid var(--line);padding-top:14px}
+.text-button{background:transparent;color:var(--accent);padding:6px 8px;min-height:44px}
+.account-bar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.account-bar p{margin:0;overflow-wrap:anywhere}
+.welcome-tools{margin:24px 0}
+.tool-card{display:grid;gap:12px;padding:24px;background:white;border:1px solid var(--line);border-radius:14px;color:var(--ink);text-decoration:none}
+.tool-card:hover{border-color:var(--accent);background:#f7fcff}
+.tool-card strong{font-size:1.25rem}
+.tool-action{font-weight:700;color:var(--accent)}
+@media(max-width:680px){.access-layout{grid-template-columns:1fr;width:calc(100% - 24px);min-height:0;margin:12px auto}.wordmark{margin-bottom:20px}.access-brand{gap:10px}.access-statement{font-size:1.95rem}}

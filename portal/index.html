@@ -5,22 +5,33 @@
 <title>Mi cuenta | Capitales Financieros</title><link rel="stylesheet" href="/assets/portal.css">
 <script type="module" src="/portal/cuenta.mjs"></script></head>
 <body>
-<header><strong><a href="/">Capitales Financieros</a></strong><nav aria-label="Navegación"><a href="/herramientas/">Simulador tributario</a></nav></header>
+<header id="main-menu" hidden><strong><a href="/portal/">Capitales Financieros</a></strong>
+<nav aria-label="Menú principal">
+  <a id="home-link" href="/portal/" aria-current="page">Inicio</a><a href="/polizas/">Analizador de pólizas</a>
+  <a href="/herramientas/">Simulador APV</a><a id="cases-link" href="#asesorias">Asesorías</a>
+</nav></header>
 <main>
-  <h1 id="page-title">Portal de asesorías</h1>
+  <h1 id="page-title" hidden>Bienvenida</h1>
   <p id="notice" class="message" role="status">Cargando acceso…</p>
-  <section id="auth-section" class="card" hidden>
-    <h2 id="auth-title">Iniciar sesión</h2>
-    <p>Usa tu correo y contraseña para ingresar.</p>
-    <form id="auth-form" class="stack">
-      <label>Correo electrónico<input id="email" type="email" autocomplete="email" maxlength="254" required></label>
-      <label>Contraseña<input id="password" type="password" autocomplete="current-password" maxlength="72" required></label>
-      <p id="auth-help" class="muted" hidden>Usa 12 caracteres o más. Si quieres ingresar como agente, solicita la activación desde tu cuenta.</p>
-      <div class="actions"><button id="auth-submit">Ingresar</button><button id="auth-toggle" class="secondary" type="button">Crear cuenta</button></div>
-    </form>
-  </section>
   <div id="dashboard" hidden>
-    <div class="actions"><p id="identity"></p><button id="signout" type="button" class="secondary">Cerrar sesión</button></div>
+    <div class="account-bar"><p id="identity" class="muted"></p><button id="signout" type="button" class="secondary">Cerrar sesión</button></div>
+    <section id="welcome">
+      <p id="welcome-text" class="intro"></p>
+      <div class="welcome-tools grid">
+        <a class="tool-card" href="/polizas/">
+          <strong>Analizador de pólizas</strong>
+          <span>Sube una póliza y revisa sus coberturas, deducibles y exclusiones.</span>
+          <span class="tool-action">Abrir analizador →</span>
+        </a>
+        <a class="tool-card" href="/herramientas/">
+          <strong>Simulador APV</strong>
+          <span>Compara el impuesto anual o mensual con y sin un aporte de APV.</span>
+          <span class="tool-action">Abrir simulador →</span>
+        </a>
+      </div>
+      <a id="advisory-link" class="button" href="#asesorias">Ir a asesorías</a>
+    </section>
+    <div id="asesorias" hidden>
     <section id="client-section" class="card" hidden>
       <h2>Vincular una asesoría</h2>
       <p class="muted">Comparte este código con tu agente para que pueda publicar la asesoría en tu cuenta.</p>
@@ -44,6 +55,7 @@
     <section aria-labelledby="case-heading">
       <h2 id="case-heading">Asesorías</h2><ul id="cases" class="case-list"></ul>
     </section>
+    </div>
   </div>
 </main>
 </body></html>

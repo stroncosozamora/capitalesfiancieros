@@ -1,61 +1,9 @@
+const { configured, call, getSession, saveSession, verifyOrigin } = require("../lib/portal-session.cjs");
+
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const accessCookie = "cf_portal_access";
-const refreshCookie = "cf_portal_refresh";
-
 function send(res, status, body) {
   return res.status(status).json(body);
-}
-
-function cookie(req, key) {
-  const prefix = key + "=";
-  return (req.headers.cookie ?? "").split(";").map(value => value.trim())
-    .find(value => value.startsWith(prefix))?.slice(prefix.length);
-}
-
-function saveSession(res, session) {
-  const flags = "; Path=/api/portal; HttpOnly; Secure; SameSite=Strict";
-  res.setHeader("Set-Cookie", [
-    accessCookie + "=" + (session?.access_token ?? "") + "; Max-Age=" + (session?.expires_in ?? 0) + flags,
-    refreshCookie + "=" + (session?.refresh_token ?? "") + "; Max-Age=" + (session ? 604800 : 0) + flags
-  ]);
-}
-
-async function call(path, { token, method = "GET", body, representation = false } = {}) {
-  const endpoint = process.env.SUPABASE_URL.replace(/\/$/, "");
-  const key = process.env.SUPABASE_PUBLISHABLE_KEY || process.env.SUPABASE_ANON_KEY;
-  const headers = { apikey:key, "Content-Type":"application/json" };
-  if (token) headers.Authorization = "Bearer " + token;
-  if (representation) headers.Prefer = "return=representation";
-  const response = await fetch(endpoint + path, {
-    method, headers, body:body === undefined ? undefined : JSON.stringify(body),
-    signal:AbortSignal.timeout(10000)
-  });
-  return { status:response.status, ok:response.ok, data:response.status === 204 ? null : await response.json() };
-}
-
-async function getSession(req, res) {
-  let token = cookie(req, accessCookie);
-  const refresh = cookie(req, refreshCookie);
-  if (!token && refresh) {
-    const response = await call("/auth/v1/token?grant_type=refresh_token", { method:"POST", body:{refresh_token:refresh} });
-    if (!response.ok) {
-      if (response.status === 400 || response.status === 401) saveSession(res, null);
-      return null;
-    }
-    saveSession(res, response.data);
-    token = response.data.access_token;
-  }
-  if (!token) return null;
-  const auth = await call("/auth/v1/user", {token});
-  return auth.ok && auth.data.email_confirmed_at ? { token, user:auth.data } : null;
-}
-
-function verifyOrigin(req) {
-  const origin = req.headers.origin;
-  if (!origin || req.headers["sec-fetch-site"] === "cross-site") return false;
-  const host = req.headers.host;
-  return origin === "https://" + host || (/^(localhost|127\.0\.0\.1)(:\d+)?$/.test(host ?? "") && origin === "http://" + host);
 }
 
 async function createSnapshot(input) {
@@ -84,7 +32,7 @@ module.exports = async function handler(req, res) {
   if (!verifyOrigin(req) || !/^application\/json(?:\s*;|$)/i.test(req.headers["content-type"] ?? "")) {
     return send(res, 403, {error:"Solicitud no autorizada."});
   }
-  if (!process.env.SUPABASE_URL || !(process.env.SUPABASE_PUBLISHABLE_KEY || process.env.SUPABASE_ANON_KEY)) {
+  if (!configured()) {
     return send(res, 503, {error:"El acceso a cuentas está pendiente de configuración."});
   }
   const body = req.body;
@@ -121,6 +69,8 @@ module.exports = async function handler(req, res) {
       return send(res, 200, {});
     }
     if (!session) return send(res, 401, {error:"Inicia sesión para acceder a tu cuenta."});
+
+    if (action === "session") return send(res, 200, {});
 
     const {token,user} = session;
     const staff = await call("/rest/v1/cf_staff?select=role&user_id=eq." + user.id, {token});

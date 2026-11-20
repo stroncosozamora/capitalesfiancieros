@@ -1,21 +1,29 @@
 import { money } from "../herramientas/impuestos.mjs";
+import { api } from "./acceso.mjs";
 
 const get = id => document.getElementById(id);
 const notice = get("notice");
-let signingUp = false;
 let portalUser = null;
 
-if (location.hash) history.replaceState(null, "", location.pathname + location.search);
+if (location.hash.includes("access_token=")) history.replaceState(null, "", location.pathname + location.search);
 
-async function api(action, payload = {}) {
-  const response = await fetch("/api/portal", {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({...payload,action})});
-  const data = await response.json();
-  if (!response.ok) {
-    const error = new Error(data.error || "No se pudo completar la acción.");
-    error.status = response.status;
-    throw error;
-  }
-  return data;
+const roles = {admin:"Administrador",agent:"Agente",client:"Cliente"};
+const titles = {admin:"Administración",agent:"Panel de agente",client:"Mis asesorías"};
+const intros = {
+  admin:"Accede a las herramientas, revisa las asesorías y gestiona las solicitudes de agentes.",
+  agent:"Usa las herramientas para preparar una asesoría y compartirla con tu cliente.",
+  client:"Usa las herramientas o consulta las asesorías publicadas para ti."
+};
+
+function renderView() {
+  if (!portalUser) return;
+  const casesView = location.hash === "#asesorias";
+  get("welcome").hidden = casesView;
+  get("asesorias").hidden = !casesView;
+  get("page-title").textContent = casesView ? titles[portalUser.role] : "Bienvenida a Capitales Financieros";
+  get("home-link").toggleAttribute("aria-current", !casesView);
+  get("cases-link").toggleAttribute("aria-current", casesView);
+  get(casesView ? "cases-link" : "home-link").setAttribute("aria-current","page");
 }
 
 function element(tag,text) {
@@ -43,23 +51,12 @@ function task(button, operation) {
     notice.textContent = "";
     try { await operation(); }
     catch (error) {
-      if (error.status === 401) showAuth();
+      if (error.status === 401) location.replace("/");
       notice.textContent = error.message;
     } finally {
       button.disabled = false;
     }
   };
-}
-
-function showAuth(message = "") {
-  portalUser = null;
-  get("dashboard").hidden = true;
-  get("cases").replaceChildren();
-  get("requests").replaceChildren();
-  get("case-form").reset();
-  get("auth-section").hidden = false;
-  get("page-title").textContent = "Portal de asesorías";
-  notice.textContent = message;
 }
 
 function renderCases(cases, role) {
@@ -119,10 +116,12 @@ async function loadDashboard(message = "") {
   try {
     const {user,cases,requests} = await api("dashboard");
     portalUser = user;
-    const titles = {admin:"Administración",agent:"Panel de agente",client:"Mis asesorías"};
-    get("page-title").textContent = titles[user.role];
-    get("identity").textContent = user.email;
-    get("auth-section").hidden = true;
+    get("identity").textContent = roles[user.role] + " · " + user.email;
+    get("welcome-text").textContent = intros[user.role];
+    get("advisory-link").textContent = user.role === "client" ? "Ver mis asesorías" : "Ir a asesorías";
+    get("main-menu").hidden = false;
+    get("page-title").hidden = false;
+    renderView();
     get("dashboard").hidden = false;
     get("client-section").hidden = user.role !== "client";
     get("staff-section").hidden = user.role === "client";
@@ -139,34 +138,17 @@ async function loadDashboard(message = "") {
     renderCases(cases,user.role);
     notice.textContent = message;
   } catch (error) {
-    showAuth(error.status === 401 ? "" : error.message);
+    if (error.status === 401) location.replace("/");
+    else notice.textContent = error.message;
   }
 }
 
-get("auth-toggle").addEventListener("click",() => {
-  signingUp = !signingUp;
-  get("auth-title").textContent = signingUp ? "Crear cuenta" : "Iniciar sesión";
-  get("auth-submit").textContent = signingUp ? "Registrarme" : "Ingresar";
-  get("auth-toggle").textContent = signingUp ? "Ya tengo cuenta" : "Crear cuenta";
-  get("auth-help").hidden = !signingUp;
-  get("password").minLength = signingUp ? 12 : 1;
-  get("password").autocomplete = signingUp ? "new-password" : "current-password";
-});
-get("auth-form").addEventListener("submit",task(get("auth-submit"),async () => {
-  const response = await api(signingUp ? "signup" : "signin",{email:get("email").value,password:get("password").value});
-  get("password").value = "";
-  if (signingUp) {
-    get("auth-toggle").click();
-    notice.textContent = response.message;
-  } else {
-    await loadDashboard();
-  }
-}));
+window.addEventListener("hashchange",renderView);
 get("signout").addEventListener("click",task(get("signout"),async () => {
   try { await api("signout"); }
   finally {
     try { sessionStorage.removeItem("cf-advisory-scenario"); } catch {}
-    showAuth();
+    location.replace("/");
   }
 }));
 get("request-agent").addEventListener("click",task(get("request-agent"),async () => {
